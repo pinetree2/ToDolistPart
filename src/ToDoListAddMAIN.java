@@ -25,13 +25,13 @@ public class ToDoListAddMAIN {
     JDateChooser selectedDate = new JDateChooser(cld.getTime());
 
     public void run() {
-        frame.setContentPane(new ToDoListAddMAIN().addTask);
+     //   frame.setContentPane(new ToDoListAddMAIN().addTask);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
 
-    public ToDoListAddMAIN(){
+    public ToDoListAddMAIN(JCheckBoxTree tree1){
         frame.setContentPane(addTask);
         frame.setLocationRelativeTo(null);
 
@@ -45,15 +45,19 @@ public class ToDoListAddMAIN {
                 Task = task.getText();
                 deadline = ((JTextField) selectedDate.getDateEditor().getUiComponent()).getText();
                 //이외 db구성 항목들 추가해야함
-                int main_index;
-                int main_big=0;
-                int chat_index =1;
-
-
                 ArrayList<ListDataMain> datamainlist = ToDoListBring.bringMain();
+                ArrayList<ListDataSub> datasublist = ToDoListBring.bringSub();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String today = dateFormat.format(new Date());
                 //Date deadlineDate = null;
+
+                int main_index;
+                int sub_index;
+                int main_big=0;
+                int sub_big=0;
+                int chat_index = 0;
+                int submain_index = 0;
+
                 try {
                     deadlineDate = new Date(dateFormat.parse(deadline).getTime());
                 } catch (ParseException ex) {
@@ -71,21 +75,21 @@ public class ToDoListAddMAIN {
                 else if (compare < 0)
                     JOptionPane.showMessageDialog(null, "이미 지난 날짜입니다.");
                 else {
-                    //db에 값 넣는 메소드 실행 -> 메소드는 sub용 main용 둘다 있어야함
-                    //sub인지 main인지 조건건문 하나 더 들어서 판단해온 다음에 다른 메소드 실행시키기
+                    //메인
+                    //if(가져온 인덱스가 null 이면 1로 저장)
 
-                    if (datamainlist.size() == 0)
-                        main_index = 1;
-                    else{
-                        for(int i = 0; i< datamainlist.size(); i++) {
-                            main_index = datamainlist.get(i).M_idx;
+                    for(int i = 0; i< datamainlist.size(); i++) {
+                        main_index = datamainlist.get(i).getM_idx();
 
-                            if(main_big < main_index){
-                                main_big = main_index;
-                            }
-
+                        if(main_index == 0){
+                            main_index =1;
                         }
+                        if(main_big < main_index){
+                            main_big = main_index;
+                        }
+
                     }
+
                     main_big +=1;
 
                     //인덱스를 가져와서 제일 큰 값 가져와서 + 1 = 현재의 추가하려는 인덱스로 지정
@@ -95,8 +99,10 @@ public class ToDoListAddMAIN {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+
                     frame.dispose();
                     frame.setVisible(false);
+                    ToDoList.refresh(tree1);
                     //클라에서 리턴있을때 종료시킬수있음
                 }
             }

@@ -21,6 +21,30 @@ public class ToDoList extends JList{
         toDoListFrame.pack();
         toDoListFrame.setVisible(true);
     }
+    public static void refresh(JCheckBoxTree tree1) {
+
+
+        ArrayList<ListDataMain> datamainlist = ToDoListBring.bringMain();
+        ArrayList<ListDataSub> datasublist = ToDoListBring.bringSub();
+        ListData rootdata = (new ListDataSub(1, 1, "To-do List", new Date(), 1, 1));
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootdata);
+
+        for (int i = 0; i < datamainlist.size(); i++) {
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(datamainlist.get(i));
+            root.add(node);
+
+            for (ListDataSub data : datasublist) {
+                if (data.getM_idx() == datamainlist.get(i).getM_idx()) {
+                    DefaultMutableTreeNode child = new DefaultMutableTreeNode(data);
+                    node.add(child);
+                }
+            }
+        }
+
+        tree1.setModel(new DefaultTreeModel(root), true);
+        tree1.setBounds(12, 10, 135, 241);
+    }
+
     public ToDoList() {
         panel1.setPreferredSize(new Dimension(480, 600));
         toDoListFrame.setContentPane(panel1);
@@ -55,7 +79,7 @@ public class ToDoList extends JList{
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ToDoListAddMAIN a = new ToDoListAddMAIN(); a.run();
+                ToDoListAddMAIN a = new ToDoListAddMAIN(tree1); a.run();
             }
         });
 
@@ -75,13 +99,13 @@ public class ToDoList extends JList{
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ToDoListAddSUB a = new ToDoListAddSUB(); a.run();
+                ToDoListAddSUB a = new ToDoListAddSUB(tree1); a.run();
             }
         });
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ToDoListDelete a = new ToDoListDelete(); a.run();
+                ToDoListDelete a = new ToDoListDelete(tree1); a.run();
             }
         });
     }

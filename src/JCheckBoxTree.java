@@ -199,16 +199,14 @@ public class JCheckBoxTree extends JTree {
                 DefaultMutableTreeNode A = (DefaultMutableTreeNode) tp.getLastPathComponent();
                 ListData checkListdata = (ListData) A.getUserObject();
                 //System.out.println(checkListdata);
-                System.out.println(checkListdata.getS_idx() + "|"  + checkListdata.getChat_index() + "|"  + checkListdata.getM_idx() + "|"  + checkMode);
+                //System.out.println(checkListdata.getS_idx() + "|"  + checkListdata.getChat_index() + "|"  + checkListdata.getM_idx() + "|"  + checkMode);
+                // 연동할때 여기에 함수 호출시켜주세요.
 
                 try {
-                    CheckController.CheckController(checkListdata.getM_idx(),checkListdata.getS_idx(),checkListdata.getChat_index(),checkMode);
+                    ToDoListCheckController.ToDoListCheckController(checkListdata.getM_idx(),checkListdata.getS_idx(),checkListdata.getChat_index(),checkMode);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-
                 //updatePredecessorsWithCheckMode(tp, checkMode);
                 // Firing the check change event
                 fireCheckChangeEvent(new CheckChangeEvent(new Object()));
@@ -226,7 +224,8 @@ public class JCheckBoxTree extends JTree {
         });
         this.setSelectionModel(dtsm);
     }
-/*
+
+    /*
     // When a node is checked/unchecked, updating the states of the predecessors
     protected void updatePredecessorsWithCheckMode(TreePath tp, boolean check) {
         TreePath parentPath = tp.getParentPath();
@@ -258,8 +257,8 @@ public class JCheckBoxTree extends JTree {
         }
         // Go to upper predecessor
         updatePredecessorsWithCheckMode(parentPath, check);
-    }
- */
+    }*/
+
     // Recursively checks/unchecks a subtree
     protected void checkSubTree(TreePath tp, boolean check) {
         CheckedNode cn = nodesCheckingState.get(tp);
@@ -275,6 +274,7 @@ public class JCheckBoxTree extends JTree {
         } else {
             checkedPaths.remove(tp);
         }
+
          */
     }
 

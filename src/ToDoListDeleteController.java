@@ -4,13 +4,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class DeleteController {
+public class ToDoListDeleteController {
 
     //메인 인덱스
     //서브 인덱스 0이면
     //해당하는 메인인덱스를 db에서 지우도록
 
-    public DeleteController(int M_idx, int S_idx) throws IOException {
+    public static void deleteController(int M_idx, int S_idx) throws IOException {
         int m_idx = M_idx;
         int s_idx = S_idx;
         String msg;

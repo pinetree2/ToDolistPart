@@ -16,7 +16,7 @@ public class ToDoListAddController extends Thread{
         String msg = "450"; //메시지
         String task = Task;
         Date deadline = Deadline;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = dateFormat.format(deadline);//날짜 스트링으로 변경
         int index = Index;
         int chatindex = Chatindex;

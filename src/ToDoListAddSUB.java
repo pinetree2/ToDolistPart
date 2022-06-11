@@ -27,13 +27,13 @@ public class ToDoListAddSUB {
     JDateChooser selectedDate = new JDateChooser(cld.getTime());
 
     public void run() {
-        frame.setContentPane(new ToDoListAddSUB().addTask);
+        //frame.setContentPane(new ToDoListAddSUB().addTask);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
 
-    public ToDoListAddSUB(){
+    public ToDoListAddSUB(JCheckBoxTree tree1){
         frame.setContentPane(addTask);
         frame.setLocationRelativeTo(null);
 
@@ -44,23 +44,25 @@ public class ToDoListAddSUB {
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<ListDataMain> datamainlist = ToDoListBring.bringMain();
-
-                int main_index;
-                int sub_index;
-                int main_big = 0;
-                int sub_big =0;
-                String msg;
-                int chat_index = 1;
-
                 Task = task.getText();
                 deadline = ((JTextField) selectedDate.getDateEditor().getUiComponent()).getText();
                 M_Idx = (Integer)m_Idx.getValue();
+                int main_index;
+                int sub_index;
+                int main_big=0;
+                int sub_big=0;
+                int chat_index = 0;
+                int submain_index = 0;
+
+
+
+
                 //이외 db구성 항목들 추가해야함
+                ArrayList<ListDataMain> datamainlist = ToDoListBring.bringMain();
+                ArrayList<ListDataSub> datasublist = ToDoListBring.bringSub();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String today = dateFormat.format(new Date());
                 //Date deadlineDate = null;
-
                 try {
                     deadlineDate = new Date(dateFormat.parse(deadline).getTime());
                 } catch (ParseException ex) {
@@ -78,40 +80,32 @@ public class ToDoListAddSUB {
                 else if (compare < 0)
                     JOptionPane.showMessageDialog(null, "이미 지난 날짜입니다.");
                 //else if 문 하나 더 넣어서 유효한 m_Idx인지 검사, getM_Idx()하면댐
-
                 else {
-
-                    for(int i = 0; i< datamainlist.size(); i++) {
-                        main_index = datamainlist.get(i).M_idx;
-                        sub_index = datamainlist.get(i).S_idx;
-
-                        if(main_big < main_index){
-                            main_big = main_index;
+                    for(int i = 0; i< datasublist.size(); i++) {
+                        sub_index = datasublist.get(i).getS_idx();
+                        if(sub_index == 0){
+                            sub_index =1;
                         }
+
                         if(sub_big < sub_index){
                             sub_big = sub_index;
                         }
                     }
                     sub_big +=1;
-                    if(M_Idx > main_big){
-                        JOptionPane.showMessageDialog(null, "유효하지 않은 번호입니다");
+                    //인덱스를 가져와서 제일 큰 값 가져와서 + 1 = 현재의 추가하려는 인덱스로 지정
+                    try {
+                        ToDoListAddSubController.toDoListAddsubController(submain_index,sub_big,Task,deadlineDate,chat_index);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
-                    else{
-                        try {
-                            ToDoListAddSubController.toDoListAddsubController(M_Idx,sub_big,Task,deadlineDate,chat_index);
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-
-                    }
-
                     frame.dispose();
                     frame.setVisible(false);
+                    ToDoList.refresh(tree1);
                     //클라에서 리턴있을때 종료시킬수있음
                 }
             }
         });
-//JOptionPane.showMessageDialog(null, "일정 내용을 입력하세요");
+
     }
 
     //db에 넘길 리턴값들, 이 메소드들 써서 값 저장해서 db로 넘기면댐, 이외 db구성 항목들 추가해야함 //deadline은 String이랑 Date중 필요한 형식 사용

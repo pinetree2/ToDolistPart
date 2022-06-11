@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class ToDoListDelete {
     private static JFrame frame = new JFrame("ToDoListDelete");
@@ -17,7 +18,7 @@ public class ToDoListDelete {
         frame.setVisible(true);
     }
 
-    public ToDoListDelete(){
+    public ToDoListDelete(JCheckBoxTree tree1){
         frame.setContentPane(deleteToDo);
         frame.setLocationRelativeTo(null);
         button1.addActionListener(new ActionListener() {
@@ -27,8 +28,13 @@ public class ToDoListDelete {
                 S_Idx = (Integer)s_Idx.getValue();
                 frame.dispose();
                 frame.setVisible(false);
-                System.out.println(getM_Idx());
-                System.out.println(getS_Idx());
+                try {
+                    ToDoListDeleteController.deleteController(getM_Idx(),getS_Idx());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                ToDoList.refresh(tree1);
+
             }
         });
     }
